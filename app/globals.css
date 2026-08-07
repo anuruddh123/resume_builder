@@ -1,0 +1,387 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ *
+ * Tokens
+ *
+ * `@theme inline` maps Tailwind utilities onto plain custom properties, so a
+ * single :root override re-themes every utility at runtime — which is what the
+ * light/dark switch relies on.
+ * ------------------------------------------------------------------ */
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-sunken: var(--sunken);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+  --color-on-accent: var(--on-accent);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-warn-line: var(--warn-line);
+  --color-good: var(--good);
+  --color-good-soft: var(--good-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+
+  --font-sans: var(--stack-sans);
+  --font-display: var(--stack-display);
+  --font-mono: var(--stack-mono);
+}
+
+:root {
+  color-scheme: light;
+
+  --stack-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --stack-display: ui-serif, "Iowan Old Style", Georgia, "Times New Roman", serif;
+  --stack-mono: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", Menlo,
+    Consolas, monospace;
+
+  --canvas: #f6f5f2;
+  --surface: #ffffff;
+  --sunken: #faf9f7;
+  --ink: #1a1917;
+  --muted: #63605a;
+  --faint: #9a958c;
+  --line: #e6e2da;
+  --line-strong: #d2cdc3;
+  --accent: #5844d4;
+  --accent-hover: #4835c2;
+  --accent-soft: #eeebfd;
+  --on-accent: #ffffff;
+  --warn: #92500a;
+  --warn-soft: #fdf2df;
+  --warn-line: #f0d8ac;
+  --good: #14664a;
+  --good-soft: #ddf1e8;
+  --danger: #a32020;
+  --danger-soft: #fceceb;
+
+  --ring: 0 0 0 3px color-mix(in oklab, var(--accent) 22%, transparent);
+  --lift: 0 1px 2px rgb(24 22 18 / 0.05), 0 10px 30px -14px rgb(24 22 18 / 0.28);
+  --lift-lg: 0 2px 4px rgb(24 22 18 / 0.05), 0 24px 60px -22px rgb(24 22 18 / 0.35);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --canvas: #0e0e11;
+    --surface: #17171c;
+    --sunken: #121216;
+    --ink: #f2f0ec;
+    --muted: #a5a19a;
+    --faint: #75716a;
+    --line: #27272e;
+    --line-strong: #383840;
+    --accent: #9184f8;
+    --accent-hover: #a79cfa;
+    --accent-soft: #201d38;
+    --on-accent: #14121f;
+    --warn: #e5b168;
+    --warn-soft: #2a2114;
+    --warn-line: #4a3a1e;
+    --good: #6fd3a8;
+    --good-soft: #12291f;
+    --danger: #f38b84;
+    --danger-soft: #2c1614;
+    --lift: 0 1px 2px rgb(0 0 0 / 0.4), 0 10px 30px -14px rgb(0 0 0 / 0.7);
+    --lift-lg: 0 2px 4px rgb(0 0 0 / 0.4), 0 24px 60px -22px rgb(0 0 0 / 0.8);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --canvas: #0e0e11;
+  --surface: #17171c;
+  --sunken: #121216;
+  --ink: #f2f0ec;
+  --muted: #a5a19a;
+  --faint: #75716a;
+  --line: #27272e;
+  --line-strong: #383840;
+  --accent: #9184f8;
+  --accent-hover: #a79cfa;
+  --accent-soft: #201d38;
+  --on-accent: #14121f;
+  --warn: #e5b168;
+  --warn-soft: #2a2114;
+  --warn-line: #4a3a1e;
+  --good: #6fd3a8;
+  --good-soft: #12291f;
+  --danger: #f38b84;
+  --danger-soft: #2c1614;
+  --lift: 0 1px 2px rgb(0 0 0 / 0.4), 0 10px 30px -14px rgb(0 0 0 / 0.7);
+  --lift-lg: 0 2px 4px rgb(0 0 0 / 0.4), 0 24px 60px -22px rgb(0 0 0 / 0.8);
+}
+
+body {
+  background-color: var(--canvas);
+  color: var(--ink);
+  font-family: var(--stack-sans);
+}
+
+/* Two soft light sources behind the page, fixed so they do not scroll away. */
+.aurora {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+.aurora::before,
+.aurora::after {
+  content: "";
+  position: absolute;
+  width: 46rem;
+  height: 46rem;
+  border-radius: 9999px;
+  filter: blur(90px);
+  opacity: 0.5;
+}
+.aurora::before {
+  top: -18rem;
+  left: -10rem;
+  background: radial-gradient(circle, color-mix(in oklab, var(--accent) 34%, transparent), transparent 68%);
+  animation: drift 26s ease-in-out infinite alternate;
+}
+.aurora::after {
+  top: -8rem;
+  right: -14rem;
+  background: radial-gradient(circle, color-mix(in oklab, var(--good) 26%, transparent), transparent 68%);
+  animation: drift 32s ease-in-out infinite alternate-reverse;
+}
+
+/* ------------------------------------------------------------------ *
+ * Motion
+ * ------------------------------------------------------------------ */
+
+@keyframes drift {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(4rem, 3rem, 0) scale(1.15);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes sweep {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(320%);
+  }
+}
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.rise {
+  animation: rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.d1 { animation-delay: 60ms; }
+.d2 { animation-delay: 120ms; }
+.d3 { animation-delay: 180ms; }
+.d4 { animation-delay: 240ms; }
+.d5 { animation-delay: 300ms; }
+
+/* Light sweeping across the primary button on hover. */
+.sheen {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.sheen::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 35%;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.28), transparent);
+  transform: translateX(-100%);
+  pointer-events: none;
+}
+.sheen:hover:not(:disabled)::after {
+  animation: sweep 0.9s ease-out;
+}
+
+.spin-slow {
+  animation: spin-slow 1.5s linear infinite;
+}
+.pulse-soft {
+  animation: pulse-soft 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Paper preview
+ *
+ * A true preview of the export: it reads the same design values the PDF
+ * renderer does, passed in as inline custom properties. It stays white in dark
+ * mode because the printed page is white.
+ * ------------------------------------------------------------------ */
+
+.paper {
+  --paper-accent: #111111;
+  --paper-text: #111111;
+  --paper-align: left;
+  --paper-family: var(--stack-sans);
+  --paper-heading-family: var(--paper-family);
+  --paper-base: 10pt;
+  --paper-name: 20pt;
+  --paper-heading: 11pt;
+  --paper-leading: 1.38;
+  --paper-gap: 1;
+
+  background: #ffffff;
+  color: var(--paper-text);
+  font-family: var(--paper-family);
+  font-size: var(--paper-base);
+  line-height: var(--paper-leading);
+}
+
+.paper h1 {
+  font-family: var(--paper-heading-family);
+  font-size: var(--paper-name);
+  font-weight: 700;
+  color: var(--paper-accent);
+  text-align: var(--paper-align);
+  margin-bottom: calc(0.4rem * var(--paper-gap));
+}
+
+/* Header lines (contact details) follow the name's alignment. */
+.paper h1 + p,
+.paper h1 + p + p {
+  text-align: var(--paper-align);
+}
+
+.paper h2 {
+  font-family: var(--paper-heading-family);
+  font-size: var(--paper-heading);
+  font-weight: 700;
+  color: var(--paper-accent);
+  margin-top: calc(1.05rem * var(--paper-gap));
+  margin-bottom: calc(0.4rem * var(--paper-gap));
+  padding-bottom: 2px;
+  border-bottom: 0.75px solid currentColor;
+}
+
+.paper[data-case="upper"] h2 {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.paper[data-case="title"] h2 {
+  text-transform: capitalize;
+}
+
+.paper[data-rule="under-text"] h2 {
+  display: inline-block;
+}
+.paper[data-rule="none"] h2 {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.paper h3 {
+  font-family: var(--paper-heading-family);
+  font-size: min(var(--paper-heading), calc(var(--paper-base) + 1pt));
+  font-weight: 700;
+  margin-top: calc(0.6rem * var(--paper-gap));
+}
+
+.paper p {
+  margin-bottom: calc(0.25rem * var(--paper-gap));
+}
+
+.paper ul {
+  list-style: none;
+  padding-left: 0.25rem;
+  margin-bottom: calc(0.25rem * var(--paper-gap));
+}
+
+.paper li {
+  position: relative;
+  padding-left: 1.1em;
+  margin-bottom: calc(0.15rem * var(--paper-gap));
+}
+
+.paper li::before {
+  content: var(--paper-bullet, "•");
+  position: absolute;
+  left: 0;
+}
+
+.paper strong {
+  font-weight: 700;
+}
+.paper em {
+  font-style: italic;
+}
+
+/* The hairline is a preview affordance so links are findable on screen; the
+   exported PDF only underlines them when the design asks for it. */
+.paper a {
+  color: var(--paper-accent);
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in oklab, currentColor 35%, transparent);
+}
+.paper a:hover {
+  border-bottom-color: currentColor;
+}
+.paper[data-links="underline"] a {
+  text-decoration: underline;
+  border-bottom: 0;
+}
+
+/* ------------------------------------------------------------------ *
+ * Utilities
+ * ------------------------------------------------------------------ */
+
+.scroll-slim {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+}
+
+*:focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
+  border-radius: 0.5rem;
+}
