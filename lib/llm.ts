@@ -64,7 +64,7 @@ export async function tailorResume({
   resumePart,
   jobDescription,
 }: TailorInput): Promise<TailorResult> {
-  const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
+  const apiKey = process.env.VITE_GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
   if (!apiKey || apiKey === "PASTE_YOUR_KEY_HERE") {
     throw new MissingCredentialsError();
   }
