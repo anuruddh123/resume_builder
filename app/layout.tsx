@@ -16,9 +16,6 @@ const THEME_INIT = `try{var t=localStorage.getItem("rt-theme");if(t==="dark"||t=
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
-      </head>
       {/*
         Extensions (Grammarly, ColorZilla, etc.) inject attributes into <body>
         before React hydrates, which reads as a hydration mismatch. This
@@ -26,6 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         mismatches inside the tree are still reported.
       */}
       <body className="min-h-screen antialiased" suppressHydrationWarning>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
         <div className="aurora" aria-hidden />
         <TopBar />
         {children}

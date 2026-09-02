@@ -9,7 +9,7 @@ import { SYSTEM_PROMPT, buildUserPrompt } from "./prompt";
  * to pin a specific version. Note Pro-tier models are not in the free quota and
  * return 429.
  */
-export const MODEL = process.env.GEMINI_MODEL || "gemini-3.5-flash";
+export const MODEL = process.env.GEMINI_MODEL || "gemini-3.5-flash-lite";
 
 export class MissingCredentialsError extends Error {
   constructor() {
@@ -86,7 +86,7 @@ export async function tailorResume({
     systemInstruction: SYSTEM_PROMPT,
     responseMimeType: "application/json",
     responseJsonSchema: RESPONSE_SCHEMA,
-    maxOutputTokens: 16384,
+    maxOutputTokens: 8192,
   };
 
   // If a model supporting thinkingLevel (like gemini-3.6-flash) is configured,
