@@ -98,11 +98,21 @@ export default function Home() {
       form.set("jobDescription", jobDescription);
 
       const response = await fetch("/api/tailor", { method: "POST", body: form });
-      const body = await response.json();
+      let body: { error?: string } | null = null;
+      try {
+        body = await response.json();
+      } catch {
+        if (response.status === 504) {
+          throw new Error("The request timed out (504 Gateway Timeout). Please try again with a shorter job description.");
+        }
+        throw new Error(
+          `Server returned an error (${response.status}: ${response.statusText || "Unknown"}). Please try again.`
+        );
+      }
 
-      if (!response.ok) throw new Error(body.error ?? "Something went wrong.");
+      if (!response.ok) throw new Error(body?.error ?? "Something went wrong.");
 
-      const tailored = body as TailorResponse;
+      const tailored = body as unknown as TailorResponse;
       setResult(tailored);
       setMarkdown(tailored.markdown);
       setDesign(normalizeDesign(tailored.design));

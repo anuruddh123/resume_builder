@@ -9,7 +9,7 @@ import { SYSTEM_PROMPT, buildUserPrompt } from "./prompt";
  * to pin a specific version. Note Pro-tier models are not in the free quota and
  * return 429.
  */
-export const MODEL = process.env.GEMINI_MODEL || "gemini-flash-latest";
+export const MODEL = process.env.GEMINI_MODEL || "gemini-3.5-flash";
 
 export class MissingCredentialsError extends Error {
   constructor() {
@@ -19,16 +19,20 @@ export class MissingCredentialsError extends Error {
 }
 
 export class EmptyResponseError extends Error {
-  constructor(readonly reason?: string) {
+  reason?: string;
+  constructor(reason?: string) {
     super("The model returned an empty response.");
     this.name = "EmptyResponseError";
+    this.reason = reason;
   }
 }
 
 export class BlockedError extends Error {
-  constructor(readonly reason?: string) {
+  reason?: string;
+  constructor(reason?: string) {
     super("The request was blocked by the model's safety filters.");
     this.name = "BlockedError";
+    this.reason = reason;
   }
 }
 
@@ -64,7 +68,12 @@ export async function tailorResume({
   resumePart,
   jobDescription,
 }: TailorInput): Promise<TailorResult> {
-  const apiKey = process.env.VITE_GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
+  const apiKey =
+    process.env.GEMINI_API_KEY ||
+    process.env.GOOGLE_API_KEY ||
+    process.env.VITE_GEMINI_API_KEY ||
+    process.env.GOOGLE_GENAI_API_KEY ||
+    process.env.NEXT_PUBLIC_GEMINI_API_KEY;
   if (!apiKey || apiKey === "PASTE_YOUR_KEY_HERE") {
     throw new MissingCredentialsError();
   }
@@ -72,6 +81,19 @@ export async function tailorResume({
   // Constructed per request so a key added to .env.local is picked up without
   // a stale client surviving from before it existed.
   const ai = new GoogleGenAI({ apiKey });
+
+  const config: Record<string, unknown> = {
+    systemInstruction: SYSTEM_PROMPT,
+    responseMimeType: "application/json",
+    responseJsonSchema: RESPONSE_SCHEMA,
+    maxOutputTokens: 16384,
+  };
+
+  // If a model supporting thinkingLevel (like gemini-3.6-flash) is configured,
+  // keep thinking minimal so requests resolve swiftly within serverless limits.
+  if (MODEL.includes("3.6")) {
+    config.thinkingConfig = { thinkingLevel: "minimal" };
+  }
 
   const response = await ai.models.generateContent({
     model: MODEL,
@@ -81,14 +103,7 @@ export async function tailorResume({
         parts: [resumePart, { text: buildUserPrompt(jobDescription) }],
       },
     ],
-    config: {
-      systemInstruction: SYSTEM_PROMPT,
-      responseMimeType: "application/json",
-      responseJsonSchema: RESPONSE_SCHEMA,
-      // Generous, because on 2.5 models internal thinking draws from this same
-      // budget — too low and the text comes back empty with finishReason MAX_TOKENS.
-      maxOutputTokens: 32768,
-    },
+    config,
   });
 
   const blockReason = response.promptFeedback?.blockReason;
