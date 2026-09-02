@@ -49,14 +49,14 @@ export function UploadForm({ onSubmit, busy }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-7">
+    <form onSubmit={handleSubmit} className="space-y-8">
       <section>
-        <div className="mb-2.5 flex items-baseline justify-between gap-3">
-          <label className="flex items-center gap-2 text-sm font-semibold">
-            <span className="grid size-5 place-items-center rounded-full bg-ink text-[10px] font-bold text-canvas">
+        <div className="mb-3 flex items-baseline justify-between gap-3">
+          <label className="flex items-center gap-2.5 text-sm font-bold text-ink">
+            <span className="grid size-6 place-items-center rounded-lg bg-gradient-to-tr from-accent to-purple-500 text-[11px] font-bold text-white shadow-xs">
               1
             </span>
-            Your current resume
+            Upload Current Resume
           </label>
           {file && (
             <button
@@ -65,7 +65,7 @@ export function UploadForm({ onSubmit, busy }: Props) {
                 setFile(null);
                 if (inputRef.current) inputRef.current.value = "";
               }}
-              className="text-xs font-medium text-muted transition hover:text-ink"
+              className="text-xs font-semibold text-danger transition hover:underline"
             >
               Remove
             </button>
@@ -93,12 +93,12 @@ export function UploadForm({ onSubmit, busy }: Props) {
           role="button"
           tabIndex={0}
           aria-label="Upload your resume"
-          className={`group cursor-pointer rounded-2xl border-2 border-dashed p-7 text-center transition-all duration-200 ${
+          className={`group relative cursor-pointer overflow-hidden rounded-2xl border-2 border-dashed p-8 text-center transition-all duration-300 ${
             dragging
-              ? "scale-[1.01] border-accent bg-accent-soft"
+              ? "scale-[1.01] border-accent bg-accent-soft/80 shadow-md shadow-accent/10"
               : file
-                ? "border-good/50 bg-good-soft/40"
-                : "border-line-strong bg-surface hover:border-accent hover:bg-accent-soft/40"
+                ? "border-good/50 bg-good-soft/30 shadow-xs"
+                : "border-line-strong/80 bg-surface/60 hover:border-accent hover:bg-accent-soft/30 hover:shadow-md"
           }`}
         >
           <input
@@ -110,64 +110,73 @@ export function UploadForm({ onSubmit, busy }: Props) {
           />
 
           {file ? (
-            <div className="flex items-center justify-center gap-3">
-              <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-good-soft text-lg text-good">
+            <div className="flex items-center justify-center gap-4">
+              <span className="grid size-12 shrink-0 place-items-center rounded-xl bg-good/15 text-xl font-bold text-good shadow-xs">
                 ✓
               </span>
               <div className="min-w-0 text-left">
-                <p className="truncate text-sm font-semibold">{file.name}</p>
+                <p className="truncate text-sm font-bold text-ink">{file.name}</p>
                 <p className="text-xs text-muted">
-                  {formatSize(file.size)} · click to choose a different file
+                  {formatSize(file.size)} · <span className="text-accent underline font-medium">Click to replace</span>
                 </p>
               </div>
             </div>
           ) : (
-            <div className="flex flex-col items-center gap-2.5">
-              <span
-                className="grid size-11 place-items-center rounded-xl border border-line bg-sunken text-lg text-muted transition group-hover:-translate-y-0.5 group-hover:text-accent"
+            <div className="flex flex-col items-center gap-3">
+              <div
+                className="grid size-12 place-items-center rounded-2xl border border-line bg-surface text-xl text-accent shadow-xs transition group-hover:-translate-y-1 group-hover:scale-105 group-hover:border-accent/40"
                 aria-hidden
               >
-                ↑
-              </span>
-              <p className="text-sm font-medium">
-                Drop your resume here, or{" "}
-                <span className="text-accent underline underline-offset-2">browse</span>
-              </p>
-              <p className="text-xs text-faint">PDF, DOCX, TXT or MD · up to 4 MB</p>
+                📄
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-ink">
+                  Drag & drop your resume here, or{" "}
+                  <span className="text-accent underline underline-offset-4">browse files</span>
+                </p>
+                <div className="mt-2 flex items-center justify-center gap-1.5">
+                  <span className="rounded-md border border-line bg-sunken px-2 py-0.5 text-[10px] font-semibold text-muted">PDF</span>
+                  <span className="rounded-md border border-line bg-sunken px-2 py-0.5 text-[10px] font-semibold text-muted">DOCX</span>
+                  <span className="rounded-md border border-line bg-sunken px-2 py-0.5 text-[10px] font-semibold text-muted">TXT</span>
+                  <span className="text-[11px] text-faint ml-1">up to 4 MB</span>
+                </div>
+              </div>
             </div>
           )}
         </div>
-
-        <p className="mt-2 text-xs text-faint">
-          Upload the PDF itself, not a copy-paste — that is how the layout and links are read.
-        </p>
       </section>
 
       <section>
-        <div className="mb-2.5 flex items-baseline justify-between gap-3">
-          <label htmlFor="jd" className="flex items-center gap-2 text-sm font-semibold">
-            <span className="grid size-5 place-items-center rounded-full bg-ink text-[10px] font-bold text-canvas">
+        <div className="mb-3 flex items-baseline justify-between gap-3">
+          <label htmlFor="jd" className="flex items-center gap-2.5 text-sm font-bold text-ink">
+            <span className="grid size-6 place-items-center rounded-lg bg-gradient-to-tr from-accent to-purple-500 text-[11px] font-bold text-white shadow-xs">
               2
             </span>
-            Job description
+            Target Job Description
           </label>
-          <span className={`text-xs tabular-nums ${jdReady ? "text-good" : "text-faint"}`}>
-            {jdLength.toLocaleString()} characters
+          <span
+            className={`rounded-full px-2.5 py-0.5 text-[11px] font-semibold tabular-nums ${
+              jdReady ? "bg-good-soft text-good" : "bg-sunken text-muted"
+            }`}
+          >
+            {jdLength.toLocaleString()} characters {jdReady && "• Ready"}
           </span>
         </div>
 
-        <div className="overflow-hidden rounded-2xl border border-line bg-surface transition focus-within:border-accent">
+        <div className="overflow-hidden rounded-2xl border border-line/80 bg-surface/70 transition-all duration-200 focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/15 focus-within:shadow-md">
           <textarea
             id="jd"
             value={jd}
             onChange={(e) => setJd(e.target.value)}
-            rows={11}
-            placeholder="Paste the full posting here — requirements, responsibilities, and the tech stack. The more of it you include, the more keywords there are to match."
+            rows={10}
+            placeholder="Paste the full job posting here — requirements, responsibilities, and key technologies. The more complete the description, the better the keyword matching."
             className="scroll-slim w-full resize-y bg-transparent p-4 font-mono text-xs leading-relaxed text-ink outline-none placeholder:text-faint"
           />
-          <div className="h-1 w-full bg-sunken">
+          <div className="h-1.5 w-full bg-sunken">
             <div
-              className={`h-full transition-all duration-500 ${jdReady ? "bg-good" : "bg-accent"}`}
+              className={`h-full transition-all duration-500 bg-gradient-to-r ${
+                jdReady ? "from-indigo-500 via-purple-500 to-emerald-500" : "from-accent to-indigo-500"
+              }`}
               style={{ width: `${jdProgress}%` }}
             />
           </div>
@@ -177,7 +186,7 @@ export function UploadForm({ onSubmit, busy }: Props) {
       {error && (
         <p
           role="alert"
-          className="rounded-xl border border-danger/25 bg-danger-soft px-3.5 py-2.5 text-sm text-danger"
+          className="rounded-xl border border-danger/25 bg-danger-soft px-4 py-3 text-sm font-medium text-danger shadow-xs"
         >
           {error}
         </p>
@@ -186,20 +195,27 @@ export function UploadForm({ onSubmit, busy }: Props) {
       <button
         type="submit"
         disabled={busy || !ready}
-        className="sheen flex w-full items-center justify-center gap-2 rounded-2xl bg-ink px-4 py-3.5 text-sm font-semibold text-canvas shadow-[var(--lift)] transition hover:enabled:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-40"
+        className="sheen relative flex w-full items-center justify-center gap-2.5 rounded-2xl bg-gradient-to-r from-accent via-indigo-600 to-purple-600 px-5 py-4 text-sm font-bold text-white shadow-lg shadow-accent/25 transition-all duration-300 hover:enabled:-translate-y-0.5 hover:enabled:shadow-xl hover:enabled:shadow-accent/35 disabled:cursor-not-allowed disabled:opacity-40"
       >
-        {busy ? "Tailoring your resume…" : "Tailor my resume"}
-        {!busy && (
-          <span aria-hidden className="transition-transform group-hover:translate-x-1">
-            →
-          </span>
+        {busy ? (
+          <>
+            <span className="size-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+            Analyzing & Tailoring Resume…
+          </>
+        ) : (
+          <>
+            Tailor My Resume Now
+            <span aria-hidden className="transition-transform group-hover:translate-x-1 font-bold">
+              →
+            </span>
+          </>
         )}
       </button>
 
-      <p className="text-center text-xs text-faint">
+      <p className="text-center text-xs font-medium text-muted">
         {ready
-          ? "Takes about 30–60 seconds."
-          : "Add both a resume and a job description to continue."}
+          ? "⚡ Fast AI generation takes ~2–4 seconds."
+          : "Upload a resume and paste a job description to begin."}
       </p>
     </form>
   );

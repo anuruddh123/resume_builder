@@ -185,20 +185,22 @@ export default function Home() {
   return (
     <main className="mx-auto max-w-3xl px-5 pb-20 pt-12 sm:px-8 sm:pt-16">
       <section className="text-center">
-        <span className="rise inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1 text-xs font-medium text-muted">
-          <span className="size-1.5 rounded-full bg-good" aria-hidden />
-          One posting at a time, done properly
+        <span className="rise inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent-soft/70 px-3.5 py-1.5 text-xs font-semibold text-accent shadow-xs backdrop-blur-sm">
+          <span className="flex size-2 rounded-full bg-accent animate-ping" aria-hidden />
+          ✨ AI-Powered ATS Optimizer
         </span>
 
-        <h1 className="rise d1 mt-5 font-display text-4xl font-semibold leading-[1.1] tracking-tight sm:text-5xl">
+        <h1 className="rise d1 mt-6 font-display text-4xl font-extrabold leading-[1.15] tracking-tight sm:text-5xl md:text-6xl">
           Rewrite your resume for
           <br className="hidden sm:block" />{" "}
-          <span className="text-accent">the job you actually want</span>
+          <span className="bg-gradient-to-r from-accent via-indigo-500 to-purple-600 bg-clip-text text-transparent">
+            the job you actually want
+          </span>
         </h1>
 
         <p className="rise d2 mx-auto mt-4 max-w-xl text-base leading-relaxed text-muted">
-          Upload your resume and paste the posting. You get back the same document — same
-          sections, same design, same links — rewritten to match what they asked for.
+          Upload your resume and paste the job posting. Get back your exact document — same
+          sections, same design, same links — rewritten to pass ATS filters and stand out to hiring managers.
         </p>
       </section>
 
@@ -208,7 +210,7 @@ export default function Home() {
         {/* Kept mounted while busy so a failed request does not discard the
             uploaded file and the pasted posting. */}
         <div className={busy ? "hidden" : "rise d3"}>
-          <div className="rounded-3xl border border-line bg-surface p-6 shadow-[var(--lift)] sm:p-8">
+          <div className="relative rounded-3xl border border-line/80 bg-surface/90 p-6 shadow-xl shadow-black/[0.03] backdrop-blur-xl transition-all sm:p-8 hover:border-line-strong">
             <UploadForm onSubmit={tailor} busy={busy} />
           </div>
         </div>
@@ -217,20 +219,23 @@ export default function Home() {
       {error && !busy && (
         <p
           role="alert"
-          className="mt-4 rounded-xl border border-danger/25 bg-danger-soft px-4 py-3 text-sm text-danger"
+          className="mt-4 rounded-xl border border-danger/25 bg-danger-soft px-4 py-3 text-sm font-medium text-danger shadow-xs"
         >
           {error}
         </p>
       )}
 
-      <section className="rise d4 mt-12 grid gap-3 sm:grid-cols-3">
+      <section className="rise d4 mt-12 grid gap-4 sm:grid-cols-3">
         {PROMISES.map((promise) => (
-          <div key={promise.title} className="rounded-2xl border border-line bg-surface/70 p-4">
-            <span className="text-lg" aria-hidden>
+          <div
+            key={promise.title}
+            className="group rounded-2xl border border-line/70 bg-surface/80 p-5 shadow-xs backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-md"
+          >
+            <div className="flex size-10 items-center justify-center rounded-xl bg-sunken border border-line text-lg group-hover:scale-110 group-hover:border-accent/40 transition-all" aria-hidden>
               {promise.icon}
-            </span>
-            <h2 className="mt-2 text-sm font-semibold">{promise.title}</h2>
-            <p className="mt-1 text-xs leading-relaxed text-muted">{promise.body}</p>
+            </div>
+            <h2 className="mt-3 text-sm font-bold text-ink">{promise.title}</h2>
+            <p className="mt-1.5 text-xs leading-relaxed text-muted">{promise.body}</p>
           </div>
         ))}
       </section>
