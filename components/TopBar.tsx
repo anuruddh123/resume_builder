@@ -41,24 +41,20 @@ function ThemeToggle() {
 
 export function TopBar() {
   return (
-    <header className="sticky top-0 z-30 border-b border-line/70 bg-canvas/80 backdrop-blur-xl transition-colors">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-5 sm:px-8">
-        <div className="flex items-center gap-3">
-          <div className="flex size-9 items-center justify-center rounded-xl bg-gradient-to-tr from-accent via-indigo-600 to-purple-500 shadow-md shadow-accent/20 text-white font-bold text-sm tracking-tight">
-            ⚡
-          </div>
-          <div>
-            <span className="font-display text-lg font-bold tracking-tight bg-gradient-to-r from-ink via-ink to-muted bg-clip-text">
-              ResumeCraft
-            </span>
-          </div>
-          <span className="ml-2 hidden rounded-full border border-line bg-surface/80 px-3 py-1 text-[11px] font-medium text-muted shadow-2xs backdrop-blur-sm sm:inline-flex items-center gap-1.5">
-            <span className="size-1.5 rounded-full bg-good animate-pulse" />
-            ATS Optimization Engine
+    <header className="sticky top-0 z-30 border-b border-line/70 bg-canvas/75 backdrop-blur-xl">
+      <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-5 sm:px-8">
+        <div className="flex items-center gap-2.5">
+          <span className="grid size-8 place-items-center rounded-lg bg-ink text-[13px] font-bold text-canvas">
+            RT
           </span>
+          <span className="font-display text-lg font-semibold tracking-tight">Resume Tailor</span>
         </div>
 
-        <div className="flex items-center gap-2">
+        <span className="ml-1 hidden rounded-full border border-line bg-surface px-2.5 py-1 text-[11px] font-medium text-muted sm:inline">
+          Keeps your layout · Keeps your links
+        </span>
+
+        <div className="ml-auto">
           <ThemeToggle />
         </div>
       </div>
