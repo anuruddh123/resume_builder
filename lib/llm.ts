@@ -16,6 +16,13 @@ export class MissingCredentialsError extends Error {
   }
 }
 
+export class GeminiTimeoutError extends Error {
+  constructor() {
+    super("The Gemini request timed out.");
+    this.name = "GeminiTimeoutError";
+  }
+}
+
 export class EmptyResponseError extends Error {
   reason?: string;
   constructor(reason?: string) {
@@ -93,7 +100,7 @@ export async function tailorResume({
     config.thinkingConfig = { thinkingLevel: "minimal" };
   }
 
-  const response = await ai.models.generateContent({
+  const request = ai.models.generateContent({
     model: MODEL,
     contents: [
       {
@@ -103,6 +110,10 @@ export async function tailorResume({
     ],
     config,
   });
+  const timeout = new Promise<never>((_, reject) => {
+    setTimeout(() => reject(new GeminiTimeoutError()), 50_000);
+  });
+  const response = await Promise.race([request, timeout]);
 
   const blockReason = response.promptFeedback?.blockReason;
   if (blockReason) throw new BlockedError(String(blockReason));

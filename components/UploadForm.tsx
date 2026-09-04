@@ -152,7 +152,7 @@ export function UploadForm({ onSubmit, busy }: Props) {
             Job description
           </label>
           <span className={`text-xs tabular-nums ${jdReady ? "text-good" : "text-faint"}`}>
-            {jdLength.toLocaleString()} characters
+            {jdLength} characters
           </span>
         </div>
 

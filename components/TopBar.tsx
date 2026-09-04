@@ -11,8 +11,14 @@ function ThemeToggle() {
 
   useEffect(() => {
     const stored = localStorage.getItem("rt-theme");
-    if (stored === "dark" || stored === "light") return setTheme(stored);
-    setTheme(window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    const next =
+      stored === "dark" || stored === "light"
+        ? stored
+        : window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light";
+    setTheme(next);
+    document.documentElement.setAttribute("data-theme", next);
   }, []);
 
   function toggle() {

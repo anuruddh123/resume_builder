@@ -4,6 +4,7 @@ import {
   tailorResume,
   BlockedError,
   EmptyResponseError,
+  GeminiTimeoutError,
   GeminiApiError,
   MalformedOutputError,
   MissingCredentialsError,
@@ -76,6 +77,13 @@ export async function POST(request: Request) {
           ? "The response was cut off before completing. Try a shorter job description."
           : "The model returned an empty response. Please try again.",
         502,
+      );
+    }
+
+    if (error instanceof GeminiTimeoutError) {
+      return fail(
+        "Gemini took too long to respond. Try a shorter job description or resume, then try again.",
+        504,
       );
     }
 
