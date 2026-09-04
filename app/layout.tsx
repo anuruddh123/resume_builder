@@ -5,6 +5,9 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Resume Tailor",
   description: "Rewrite your resume for a specific job description.",
+  icons: {
+    icon: "/icon.svg",
+  },
 };
 
 /**

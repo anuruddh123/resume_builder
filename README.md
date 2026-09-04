@@ -15,8 +15,8 @@ npm run dev
 Get a **free** API key at <https://aistudio.google.com/apikey> — Google AI Studio's
 free tier needs no credit card. Open <http://localhost:3000>.
 
-Set `GEMINI_MODEL` in `.env.local` to change tiers; it defaults to
-`gemini-2.5-flash`. `gemini-2.5-pro` gives better rewrites on a smaller free quota.
+Set `GEMINI_MODEL` in `.env.local` to change models; it defaults to
+`gemini-3.6-flash`. Use a specific model only when it is enabled for your API key.
 
 ## How it works
 

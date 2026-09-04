@@ -4,12 +4,10 @@ import { TailorResultSchema, type TailorResult } from "./schemas";
 import { SYSTEM_PROMPT, buildUserPrompt } from "./prompt";
 
 /**
- * `gemini-flash-latest` is an alias that tracks the current Flash model, so a
- * pinned version being retired cannot break the app. Override with GEMINI_MODEL
- * to pin a specific version. Note Pro-tier models are not in the free quota and
- * return 429.
+ * Use the current Flash model recommended by the Gemini API. Override with
+ * GEMINI_MODEL when the API key needs a different model.
  */
-export const MODEL = process.env.GEMINI_MODEL || "gemini-3.5-flash-lite";
+export const MODEL = process.env.GEMINI_MODEL || "gemini-3.6-flash";
 
 export class MissingCredentialsError extends Error {
   constructor() {
