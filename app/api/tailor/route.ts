@@ -15,7 +15,8 @@ import { normalizeDesign } from "@/lib/design";
 import { MIN_JD_CHARS } from "@/lib/constants";
 
 export const runtime = "nodejs";
-export const maxDuration = 60;
+// Netlify's synchronous function limit is 26 seconds on the current plan.
+export const maxDuration = 26;
 
 function fail(message: string, status: number) {
   return NextResponse.json({ error: message }, { status });

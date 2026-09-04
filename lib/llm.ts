@@ -91,7 +91,7 @@ export async function tailorResume({
     systemInstruction: SYSTEM_PROMPT,
     responseMimeType: "application/json",
     responseJsonSchema: RESPONSE_SCHEMA,
-    maxOutputTokens: 8192,
+    maxOutputTokens: 4096,
   };
 
   // If a model supporting thinkingLevel (like gemini-3.6-flash) is configured,
@@ -111,7 +111,7 @@ export async function tailorResume({
     config,
   });
   const timeout = new Promise<never>((_, reject) => {
-    setTimeout(() => reject(new GeminiTimeoutError()), 50_000);
+    setTimeout(() => reject(new GeminiTimeoutError()), 22_000);
   });
   const response = await Promise.race([request, timeout]);
 
