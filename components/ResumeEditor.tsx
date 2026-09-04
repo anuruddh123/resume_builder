@@ -120,7 +120,7 @@ export function ResumeEditor({ markdown, design, onChange, onReset, dirty }: Pro
         </div>
 
         <span className="hidden text-xs text-faint sm:inline">
-          {words.toLocaleString()} words
+          {words} words
           {dirty && <span className="ml-2 text-warn">· edited</span>}
         </span>
 

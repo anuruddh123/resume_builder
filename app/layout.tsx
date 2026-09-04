@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ClientOnly } from "@/components/ClientOnly";
 import { TopBar } from "@/components/TopBar";
 import "./globals.css";
 
@@ -15,8 +16,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen antialiased" suppressHydrationWarning>
         <div className="aurora" aria-hidden />
-        <TopBar />
-        {children}
+        <ClientOnly>
+          <TopBar />
+          {children}
+        </ClientOnly>
       </body>
     </html>
   );
