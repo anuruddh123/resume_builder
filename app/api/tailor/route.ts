@@ -8,7 +8,7 @@ import {
   GeminiApiError,
   MalformedOutputError,
   MissingCredentialsError,
-  MODEL,
+  getModel,
 } from "@/lib/llm";
 import { resumeToMarkdown } from "@/lib/markdown";
 import { normalizeDesign } from "@/lib/design";
@@ -113,23 +113,33 @@ export async function POST(request: Request) {
       }
       if (error.status === 404) {
         return fail(
-          `The model "${MODEL}" is not available for this key. Set GEMINI_MODEL in .env.local to one your account supports.`,
+          `The model "${getModel()}" is not available for this key. Set GEMINI_MODEL in .env.local to one your account supports (e.g. gemini-3.6-flash).`,
           502,
         );
       }
       if (error.status === 429) {
         return fail(
-          "Gemini's free-tier rate limit was hit. Wait a minute and try again.",
+          "Gemini's free-tier rate limit was hit. Please wait a minute and try again.",
           429,
         );
       }
       if (error.status >= 500) {
-        return fail("Gemini is temporarily unavailable. Try again shortly.", 503);
+        return fail(
+          `Gemini is temporarily unavailable (${getModel()} returned status ${error.status}). Google's servers are experiencing high demand — please wait a moment and try again.`,
+          503,
+        );
       }
       return fail(detail || `The API returned an error (${error.status}).`, 502);
     }
 
     console.error("Unexpected error in /api/tailor:", error);
+    const msg = error instanceof Error ? error.message : String(error);
+    if (msg.includes("fetch failed") || msg.includes("Timeout") || msg.includes("timeout")) {
+      return fail(
+        "Connection to Gemini API timed out. Please check your internet connection and try again.",
+        504,
+      );
+    }
     return fail("Something went wrong while tailoring your resume.", 500);
   }
 }
