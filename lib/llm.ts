@@ -11,23 +11,16 @@ try {
   // Ignored in environments where setDefaultResultOrder is unavailable
 }
 
-export const DEFAULT_MODEL = "gemini-3.6-flash";
+export const DEFAULT_MODEL = "gemini-3.5-flash-lite";
 
 /**
-<<<<<<< HEAD
- * Use a generally available Flash Lite model by default for fastest response time.
- * Override with GEMINI_MODEL in .env.local if needed.
- */
-export const MODEL = process.env.GEMINI_MODEL || "gemini-3.5-flash-lite";
-=======
- * Reads the configured Gemini model dynamically, defaulting to `gemini-3.6-flash`.
+ * Reads the configured Gemini model dynamically, defaulting to `gemini-3.5-flash-lite`.
  */
 export function getModel(): string {
   return process.env.GEMINI_MODEL || DEFAULT_MODEL;
 }
 
 export const MODEL = getModel();
->>>>>>> b59cbeb77a5f37424e0281ca2f97f69432e247d7
 
 export class MissingCredentialsError extends Error {
   constructor() {
