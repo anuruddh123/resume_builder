@@ -99,13 +99,16 @@ export async function POST(request: Request) {
       const detail = error.message ?? "";
       console.error("Gemini API error:", error.status, detail);
 
-      if (error.status === 400 && /api[_ ]?key/i.test(detail)) {
-        return fail("GEMINI_API_KEY is invalid. Check .env.local.", 500);
+      if (error.status === 401 || (error.status === 400 && /api[_ ]?key/i.test(detail))) {
+        return fail(
+          "Invalid Gemini API Key. Your key must start with 'AIzaSy' from Google AI Studio (https://aistudio.google.com/apikey). Check .env.local.",
+          401,
+        );
       }
       if (error.status === 403) {
         return fail(
           "That API key is not authorized. Confirm it was created for the Gemini API at aistudio.google.com/apikey.",
-          500,
+          403,
         );
       }
       if (error.status === 404) {

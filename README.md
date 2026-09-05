@@ -16,7 +16,7 @@ Get a **free** API key at <https://aistudio.google.com/apikey> — Google AI Stu
 free tier needs no credit card. Open <http://localhost:3000>.
 
 Set `GEMINI_MODEL` in `.env.local` to change models; it defaults to
-`gemini-3.6-flash`. Use a specific model only when it is enabled for your API key.
+`gemini-2.5-flash`. Use a specific model only when it is enabled for your API key.
 
 ## How it works
 

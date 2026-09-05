@@ -4,10 +4,10 @@ import { TailorResultSchema, type TailorResult } from "./schemas";
 import { SYSTEM_PROMPT, buildUserPrompt } from "./prompt";
 
 /**
- * Use the current Flash model recommended by the Gemini API. Override with
- * GEMINI_MODEL when the API key needs a different model.
+ * Use a generally available Flash Lite model by default for fastest response time.
+ * Override with GEMINI_MODEL in .env.local if needed.
  */
-export const MODEL = process.env.GEMINI_MODEL || "gemini-3.6-flash";
+export const MODEL = process.env.GEMINI_MODEL || "gemini-3.5-flash-lite";
 
 export class MissingCredentialsError extends Error {
   constructor() {
