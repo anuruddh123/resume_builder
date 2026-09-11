@@ -11,15 +11,21 @@ export const metadata: Metadata = {
   },
 };
 
+import { AuthProvider } from "@/context/AuthContext";
+import { AuthModal } from "@/components/AuthModal";
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen antialiased" suppressHydrationWarning>
         <div className="aurora" aria-hidden />
-        <ClientOnly>
-          <TopBar />
-          {children}
-        </ClientOnly>
+        <AuthProvider>
+          <ClientOnly>
+            <TopBar />
+            {children}
+            <AuthModal />
+          </ClientOnly>
+        </AuthProvider>
       </body>
     </html>
   );

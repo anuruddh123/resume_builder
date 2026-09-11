@@ -13,6 +13,7 @@ import {
 import { resumeToMarkdown } from "@/lib/markdown";
 import { normalizeDesign } from "@/lib/design";
 import { MIN_JD_CHARS } from "@/lib/constants";
+import { getCurrentUser } from "@/lib/auth/server";
 
 export const runtime = "nodejs";
 // Netlify's synchronous function limit is 26 seconds on the current plan.
@@ -23,6 +24,11 @@ function fail(message: string, status: number) {
 }
 
 export async function POST(request: Request) {
+  const user = await getCurrentUser(request);
+  if (!user) {
+    return fail("Please sign in to tailor your resume.", 401);
+  }
+
   let form: FormData;
   try {
     form = await request.formData();

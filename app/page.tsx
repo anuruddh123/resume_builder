@@ -41,7 +41,10 @@ const PROMISES = [
   },
 ];
 
+import { useAuth } from "@/context/AuthContext";
+
 export default function Home() {
+  const { user, openAuthModal } = useAuth();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<TailorResponse | null>(null);
@@ -89,6 +92,11 @@ export default function Home() {
   }
 
   async function tailor(resume: File, jobDescription: string) {
+    if (!user) {
+      openAuthModal();
+      return;
+    }
+
     setBusy(true);
     setError(null);
     setFileName(resume.name);
@@ -108,6 +116,11 @@ export default function Home() {
         throw new Error(
           `Server returned an error (${response.status}: ${response.statusText || "Unknown"}). Please try again.`
         );
+      }
+
+      if (response.status === 401) {
+        openAuthModal();
+        throw new Error(body?.error || "Please sign in to tailor your resume.");
       }
 
       if (!response.ok) throw new Error(body?.error ?? "Something went wrong.");
