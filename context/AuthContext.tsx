@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import type { User, UserRole } from "@/lib/auth/types";
@@ -11,7 +11,7 @@ interface AuthContextType {
   closeAuthModal: () => void;
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string) => Promise<void>;
-  demoLogin: (role?: UserRole) => Promise<void>;
+  demoLogin: () => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -67,10 +67,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsAuthModalOpen(false);
   }
 
-  async function demoLogin(role: UserRole = "user") {
-    const email = role === "admin" ? "admin@resumecraft.com" : "demo@resumecraft.com";
-    const password = role === "admin" ? "admin1234" : "demo1234";
-    await login(email, password);
+  async function demoLogin() {
+    await login("demo@resumecraft.com", "demo1234");
   }
 
   async function logout() {

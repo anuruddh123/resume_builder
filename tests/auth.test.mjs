@@ -45,10 +45,6 @@ test("store: manages user registration, lookup, and demo accounts", async () => 
   assert.ok(demoUser);
   assert.equal(demoUser.role, "user");
 
-  const adminUser = await findUserByEmail("admin@resumecraft.com");
-  assert.ok(adminUser);
-  assert.equal(adminUser.role, "admin");
-
   const testEmail = "unique_user_" + Date.now() + "@example.com";
   const pwdHash = await hashPassword("pass123");
   const created = await createUser({

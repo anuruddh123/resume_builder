@@ -12,10 +12,9 @@ const usersStore: Map<string, UserWithPassword> =
 if (!globalForStore.__auth_users_store) {
   globalForStore.__auth_users_store = usersStore;
 
-  // Seed default demo user and admin user
+  // Seed default demo user
   const demoSalt = bcrypt.genSaltSync(10);
   const demoHash = bcrypt.hashSync("demo1234", demoSalt);
-  const adminHash = bcrypt.hashSync("admin1234", demoSalt);
 
   const demoUser: UserWithPassword = {
     id: "usr_demo_user",
@@ -26,17 +25,7 @@ if (!globalForStore.__auth_users_store) {
     createdAt: new Date().toISOString(),
   };
 
-  const adminUser: UserWithPassword = {
-    id: "usr_admin_user",
-    name: "Admin User",
-    email: "admin@resumecraft.com",
-    role: "admin",
-    passwordHash: adminHash,
-    createdAt: new Date().toISOString(),
-  };
-
   usersStore.set(demoUser.email.toLowerCase(), demoUser);
-  usersStore.set(adminUser.email.toLowerCase(), adminUser);
 }
 
 export async function findUserByEmail(email: string): Promise<UserWithPassword | null> {

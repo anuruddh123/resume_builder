@@ -32,11 +32,11 @@ export function AuthModal() {
     }
   }
 
-  async function handleDemo(role: "user" | "admin") {
+  async function handleDemo() {
     setError(null);
     setBusy(true);
     try {
-      await demoLogin(role);
+      await demoLogin();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Demo sign in failed.");
     } finally {
@@ -186,26 +186,16 @@ export function AuthModal() {
         {/* 1-Click Demo Login */}
         <div className="mt-6 border-t border-line/70 pt-5">
           <p className="text-center text-[11px] font-medium text-muted">
-            ⚡ Quick Test with 1-Click Demo Accounts:
+            ⚡ Want to test without creating an account?
           </p>
-          <div className="mt-2.5 grid grid-cols-2 gap-2">
-            <button
-              type="button"
-              disabled={busy}
-              onClick={() => handleDemo("user")}
-              className="rounded-xl border border-line bg-sunken py-2 text-center text-xs font-semibold text-ink transition hover:border-accent hover:bg-accent-soft hover:text-accent"
-            >
-              Demo User
-            </button>
-            <button
-              type="button"
-              disabled={busy}
-              onClick={() => handleDemo("admin")}
-              className="rounded-xl border border-line bg-sunken py-2 text-center text-xs font-semibold text-ink transition hover:border-accent hover:bg-accent-soft hover:text-accent"
-            >
-              Demo Admin
-            </button>
-          </div>
+          <button
+            type="button"
+            disabled={busy}
+            onClick={handleDemo}
+            className="mt-2.5 flex w-full items-center justify-center gap-2 rounded-xl border border-line bg-sunken py-2.5 text-center text-xs font-semibold text-ink transition hover:border-accent hover:bg-accent-soft hover:text-accent"
+          >
+            <span>⚡</span> 1-Click Demo Login
+          </button>
         </div>
       </div>
     </div>
